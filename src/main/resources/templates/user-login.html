@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Login Page</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar"></div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+
+            <div th:if="${param.error}" class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>
+                    <th:block th:text="#{user-login.invalid-login-credentials.alert}"/>
+                </strong>
+            </div>
+
+            <div th:if="${param.logout}" class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>
+                    <th:block th:text="#{user-login.logout.alert}"/>
+                </strong>
+            </div>
+
+            <h2 align="center">
+                <th:block th:text="#{userlogin.form.title}"/>
+            </h2>
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <label for="phone">
+                        <th:block th:text="#{userlogin.phone}"/>
+                    </label>
+                    <input class="form-control" id="phone" th:placeholder="#{userlogin.placeholder.phone}"
+                           name="username"
+                           value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <th:block th:text="#{userlogin.password}"/>
+                    </label>
+                    <input class="form-control" id="password" th:placeholder="#{userlogin.placeholder.password}"
+                           name="password"
+                           value="" type="password">
+                </div>
+
+                <div class="form-group" align="center">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success">
+                            <th:block th:text="#{userlogin.button.login.label}"/>
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+</html>
