@@ -21,9 +21,7 @@
             <form th:action="@{/guest/user-registration}" th:object="${user}" method="post">
 
                 <div class="form-group">
-                    <label for="name">
-                        <th:block th:text="#{userregistration.name}"/>
-                    </label>
+                    <label for="name" th:text="#{userregistration.name}"></label>
                     <input class="form-control" id="name" th:placeholder="#{userregistration.placeholder.name}"
                            th:field="*{name}" th:value="${name}"/>
                     <span class="font-italic text-danger" th:if="${#fields.hasErrors('name')}"

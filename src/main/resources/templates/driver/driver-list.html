@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Driver List</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container-fluid">
+    <table class="table table-hover">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        <th:block th:each="driver : ${drivers}">
+            <tr>
+                <td th:text="${driver.id}"></td>
+                <td th:text="${driver.name}"></td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+<br/>
+</body>
+</html>

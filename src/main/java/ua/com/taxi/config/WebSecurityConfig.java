@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.com.taxi.domain.Role;
 import ua.com.taxi.service.UserService;
 
 @Configuration
@@ -18,8 +19,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/guest/user-registration").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/", "/guest/user-registration").permitAll()
+                .antMatchers("/admin/**").hasAnyRole(Role.ADMIN)
+                .anyRequest().denyAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
