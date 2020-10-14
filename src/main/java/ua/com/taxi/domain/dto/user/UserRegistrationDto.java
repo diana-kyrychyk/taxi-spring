@@ -1,4 +1,4 @@
-package ua.com.taxi.domain.dto;
+package ua.com.taxi.domain.dto.user;
 
 import ua.com.taxi.validation.annotation.PasswordsMatch;
 import ua.com.taxi.validation.annotation.PhoneExistsConstraint;
