@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Registration Page</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h2 align="center">
+                <th:block th:text="#{userregistration.registration}"/>
+            </h2>
+            <form th:action="@{/guest/user-registration}" th:object="${user}" method="post">
+
+                <div class="form-group">
+                    <label for="name" th:text="#{userregistration.name}"></label>
+                    <input class="form-control" id="name" th:placeholder="#{userregistration.placeholder.name}"
+                           th:field="*{name}" th:value="${name}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('name')}"
+                          th:errors="*{name}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone-number">
+                        <th:block th:text="#{userregistration.phone}"/>
+                    </label>
+                    <input class="form-control" id="phone-number" th:placeholder="#{userlogin.placeholder.phone}"
+                           th:field="*{phone}" th:value="${phone}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('phone')}"
+                          th:errors="*{phone}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <th:block th:text="#{userregistration.password}"/>
+                    </label>
+                    <input class="form-control" id="password" type="password"
+                           th:placeholder="#{userlogin.placeholder.password}" th:field="*{password}"
+                           th:value="${password}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password-confirm">
+                        <th:block th:text="#{userregistration.password-repeat}"/>
+                    </label>
+                    <input class="form-control" id="password-confirm" type="password"
+                           th:placeholder="#{userregistration.placeholder.password-confirm}"
+                           th:field="*{passwordConfirm}" th:value="${passwordConfirm}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('passwordConfirm')}"
+                          th:errors="*{passwordConfirm}"></span>
+                </div>
+
+
+                <div class="form-group" align="center">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success">
+                            <th:block th:text="#{userregistration.button.create}"/>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Car List</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container-fluid">
+    <table class="table table-hover">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>License Plate</th>
+            <th>Category</th>
+            <th>Capacity</th>
+            <th>Driver</th>
+            <th>Status</th>
+        </tr>
+
+        <th:block th:each="car : ${cars}">
+            <tr>
+                <td th:text="${car.id}"></td>
+                <td>
+                    <th:block th:text="${car.brand}"></th:block>
+                    <th:block th:text="${car.model}"></th:block>
+                </td>
+                <td th:text="${car.licensePlate}"></td>
+                <td>
+                    <span th:text="${car.category}" class="badge badge-secondary"></span>
+                </td>
+                <td th:text="${car.capacity}"></td>
+                <td>
+                    <span th:if="${car.driver}" th:text="${car.driver.name}"></span>
+
+                </td>
+                <td>
+                    <span th:if="${'INACTIVE'.equals(car.status.toString())}" class="badge badge-danger"
+                          th:text="${car.status}"></span>
+                    <span th:if="${'ON_ORDER'.equals(car.status.toString())}" class="badge badge-primary"
+                          th:text="${car.status}"></span>
+                    <span th:if="${'FREE'.equals(car.status.toString())}" class="badge badge-success"
+                          th:text="${car.status}"></span>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+<br/>
+</body>
+</html>

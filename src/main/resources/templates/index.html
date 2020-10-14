@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Welcome Page</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h3 th:utext="#{welcome.moto}"></h3>
+            <div th:utext="#{welcomepage.task}">
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+</html>
