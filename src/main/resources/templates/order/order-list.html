@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Order List</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container">
+    <div th:if="${errorMessage != null}" class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>${errorMessage}</strong>
+    </div>
+</div>
+
+<div class="container-fluid">
+
+    <form th:action="@{/admin/order-list}" method="get" th:object="${searchParameters}">
+
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <label th:text="#{orderlist.form.label.passenger}"></label>
+                <select th:field="*{orderFilters.selectedPassenger}" th:title="#{orderlist.passenger.filter.title}">
+                    <option value="" th:text="#{orderlist.form.option.passenger-filter}"></option>
+                    <option th:each="item:${searchParameters.getAllUsers()}"
+                            th:value="${item.id}" th:text="${item.phone}"></option>
+                </select>
+            </div>
+
+            <div>
+                <div>
+                    <label th:text="#{orderlist.label.calendar.from}"></label>
+                    <input type="date" th:title="#{orderlist.startdate.filter.title}"
+                           th:field="*{orderFilters.startDate}"
+                           th:value="${searchParameters.orderFilters.startDate}"/>
+
+                    <label th:text="#{orderlist.label.calendar.to}"></label>
+                    <input type="date" th:title="#{orderlist.enddate.filter.title}" name="endDate"
+                           th:field="*{orderFilters.endDate}"
+                           th:value="${searchParameters.orderFilters.endDate}"/>
+                </div>
+                <div>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('orderFilters.startDate')}"
+                          th:errors="*{orderFilters.startDate}"></span>
+                </div>
+            </div>
+
+            <div>
+                <label th:text="#{orderlist.label.sort-by}"></label>
+                <select th:field="*{sortType}">
+                    <option th:each="item:${searchParameters.ALL_SORT_TYPES}" th:value="${item}"
+                            th:utext="#{order-list.sortby.label.__${item}__}"></option>
+                </select>
+
+                <button type="submit" class="btn btn-success" th:text="#{orderlist.button.apply}"></button>
+            </div>
+        </div>
+
+        <div>
+
+            <table class="table table-hover">
+                <tr>
+                    <th th:utext="#{orderlist.creationdate}"></th>
+                    <th th:utext="#{orderlist.phone}"></th>
+                    <th th:utext="#{orderlist.departureaddress}"></th>
+                    <th th:utext="#{orderlist.arrivaladdress}"></th>
+                    <th th:utext="#{orderlist.category}"></th>
+                    <th th:utext="#{orderlist.license_plate}"></th>
+                    <th th:utext="#{orderlist.fare}"></th>
+                    <th th:utext="#{orderlist.status}"></th>
+                    <th th:utext="#{orderlist.actions}"></th>
+                </tr>
+
+                <th:block th:each="order : ${orders}">
+                    <tr>
+                        <td th:text="${#temporals.format(order.creationDate, 'dd-MM-yyyy HH:mm')}">
+                        </td>
+                        <td th:text="${order.userPhone}"></td>
+                        <td th:text="${order.departureAddress}"></td>
+                        <td th:text="${order.arrivalAddress}"></td>
+                        <td th:text="${order.category}"></td>
+                        <td th:text="${order.licensePlate}"></td>
+                        <td th:text="${#numbers.formatDecimal(order.fare / 100, 0, 2,'COMMA')}">
+                            UAH
+                        </td>
+                        <td>
+                            <span th:if="${'NEW'.equals(order.status.toString())}" class="badge badge-primary"
+                                  th:text="#{enum.OrderStatus.__${order.status}__}"></span>
+                            <span th:if="${'ON_ROAD'.equals(order.status.toString())}" class="badge badge-warning"
+                                  th:text="#{enum.OrderStatus.__${order.status}__}"></span>
+                            <span th:if="${'COMPLETED'.equals(order.status.toString())}" class="badge badge-success"
+                                  th:text="#{enum.OrderStatus.__${order.status}__}"></span>
+                            <span th:if="${'CANCELLED'.equals(order.status.toString())}" class="badge badge-danger"
+                                  th:text="#{enum.OrderStatus.__${order.status}__}"></span>
+                        </td>
+
+                        <td>
+                            <a th:if="${'NEW'.equals(order.status.toString()) || 'ON_ROAD'.equals(order.status.toString())}"
+                               href="@{'/admin/order-cancel?id=' + ${order.orderId}}"
+                               class="btn btn-danger btn-sm"
+                               role="button"
+                               th:text="#{orderlist.button.cancel}"></a>
+
+                            <a th:if="${'ON_ROAD'.equals(order.status.toString())}"
+                               href="@{'/admin/order-complete?id=' + ${order.orderId}}"
+                               class="btn btn-success btn-sm"
+                               role="button"
+                               th:text="#{orderlist.button.complete}"></a>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div>
+                <button th:if="${searchParameters.pageNumber > 0}"
+                        type="submit" class="btn btn-success"
+                        th:name="pageNumber"
+                        th:value="${searchParameters.pageNumber - 1}"
+                        th:text="#{orderlist.button.prev}">
+                </button>
+                <button th:if="${searchParameters.pageNumber < searchParameters.totalPages - 1}"
+                        type="submit" class="btn btn-success"
+                        th:name="pageNumber"
+                        th:value="${searchParameters.pageNumber + 1}"
+                        th:text="#{orderlist.button.next}">
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+<br/>
+</body>
+</html>

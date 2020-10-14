@@ -1,6 +1,6 @@
 package ua.com.taxi.validation.validator;
 
-import ua.com.taxi.domain.dto.UserRegistrationDto;
+import ua.com.taxi.domain.dto.user.UserRegistrationDto;
 import ua.com.taxi.validation.annotation.PasswordsMatch;
 
 import javax.validation.ConstraintValidator;

@@ -2,8 +2,8 @@ package ua.com.taxi.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ua.com.taxi.domain.User;
-import ua.com.taxi.domain.dto.UserRegistrationDto;
-import ua.com.taxi.domain.dto.UserUpdateDto;
+import ua.com.taxi.domain.dto.user.UserRegistrationDto;
+import ua.com.taxi.domain.dto.user.UserUpdateDto;
 
 import java.util.List;
 import java.util.Optional;

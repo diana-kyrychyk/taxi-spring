@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.taxi.domain.Role;
 import ua.com.taxi.domain.User;
-import ua.com.taxi.domain.dto.UserRegistrationDto;
-import ua.com.taxi.domain.dto.UserUpdateDto;
+import ua.com.taxi.domain.dto.user.UserRegistrationDto;
+import ua.com.taxi.domain.dto.user.UserUpdateDto;
 import ua.com.taxi.service.RoleService;
 import ua.com.taxi.service.UserService;
 
