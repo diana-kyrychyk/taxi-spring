@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>User Edit</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='false')"></div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h2>Edit</h2>
+            <form th:action="@{/admin/user-edit}" th:object="${user}" method="post">
+
+                <div class="form-group">
+                    <label>ID:</label>
+                    <input class="form-control" id="idID" name="id" readonly="readonly" th:value="*{id}">
+                </div>
+
+                <div class="form-group">
+                    <label for="name" th:text="#{userregistration.name}"></label>
+                    <input class="form-control" id="name" th:placeholder="#{userregistration.placeholder.name}"
+                           th:field="*{name}" th:value="${name}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('name')}"
+                          th:errors="*{name}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Roles:</label>
+                    <ul>
+                        <li th:each="checkboxValue: ${allRoles}">
+                            <input type="checkbox" th:field="*{roles}" th:value="${checkboxValue.getId()}"/>
+                            <label th:for="${#ids.prev('roles')}" th:text="${checkboxValue.getName()}"></label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+
+</html>
