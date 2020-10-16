@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Create order</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h3 th:text="#{order-creation.title.order-booking}"></h3>
+            <form th:action="@{/user/order-create}" th:object="${order}" method="post">
+                <div class="form-group">
+                    <label style="font-weight: bold;" th:text="#{order-confirm.departureaddress}"></label>
+                    <select required th:field="*{departureId}">
+                        <option value="" th:text="#{order-creation.form.option.pleasechooseaddress}"></option>
+                        <option th:each="item:${availableAddresses}"
+                                th:value="${item.id}" th:text="${item.street  + ', ' +  item.building}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: bold;" th:text="#{order.confirm.arrivaladdress}"></label>
+                    <select required th:field="*{arrivalId}">
+                        <option value="" th:text="#{order-creation.form.option.pleasechooseaddress}"></option>
+                        <option th:each="item:${availableAddresses}"
+                                th:value="${item.id}" th:text="${item.street + ', ' +  item.building}"></option>
+                    </select>
+                    <br/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('arrivalId')}"
+                          th:errors="*{arrivalId}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: bold;" th:text="#{order-confirm.category}"></label>
+
+                    <select required th:field="*{category}">
+                        <option th:each="item:${availableCategories}"
+                                th:value="${item}" th:text="${item.toString()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: bold;" th:text="#{order-confirm.passengers}"></label>
+
+                    <select required th:field="*{passengerCount}">
+                        <option th:each="item:${passengerCounts}"
+                                th:value="${item}" th:text="${item.toString()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success" th:text="#{order-creation.button.book}">
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+
+</html>
