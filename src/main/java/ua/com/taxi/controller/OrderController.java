@@ -1,6 +1,7 @@
 package ua.com.taxi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.taxi.domain.Address;
 import ua.com.taxi.domain.Category;
 import ua.com.taxi.domain.Order;
@@ -28,6 +30,7 @@ import ua.com.taxi.domain.dto.order.OrderConfirmDto;
 import ua.com.taxi.domain.dto.order.OrderCreateDto;
 import ua.com.taxi.domain.dto.order.OrderListDto;
 import ua.com.taxi.domain.dto.order.SearchParameters;
+import ua.com.taxi.exception.CarBusyException;
 import ua.com.taxi.service.AddressService;
 import ua.com.taxi.service.OrderService;
 import ua.com.taxi.service.UserService;
@@ -38,6 +41,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -45,12 +49,15 @@ public class OrderController {
 
     private static final List<Integer> AVAILABLE_PASSENGER_COUNT_SETS = Arrays.asList(2, 4, 8);
 
+    private MessageSource messageSource;
+
     private OrderService orderService;
     private UserService userService;
     private AddressService addressService;
 
     @Autowired
-    public OrderController(OrderService orderService, UserService userService, AddressService addressService) {
+    public OrderController(MessageSource messageSource, OrderService orderService, UserService userService, AddressService addressService) {
+        this.messageSource = messageSource;
         this.orderService = orderService;
         this.userService = userService;
         this.addressService = addressService;
@@ -153,13 +160,16 @@ public class OrderController {
     }
 
     @PostMapping("/user/order-confirm")
-    public String userConfirmOrder(Model model, @RequestParam("orderId") int orderId, @RequestParam("carId") int carId) {
+    public String userConfirmOrder(@RequestParam("orderId") int orderId, @RequestParam("carId") int carId,
+                                   RedirectAttributes redirectAttributes, Locale locale) {
 
         String page = "";
         try {
             orderService.confirm(orderId, carId);
             page = "redirect:/";
-        } catch (Exception e) {
+        } catch (CarBusyException e) {
+            String message = messageSource.getMessage("order-confirm.car-is-busy.exception", new Object[0], locale);
+            redirectAttributes.addFlashAttribute("errorMessage", message);
             page = String.format("redirect:/user/order-confirm?id=%s", orderId);
         }
         return page;
