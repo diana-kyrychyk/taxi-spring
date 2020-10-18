@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Error403 occurs</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+<body class="bg-dark">
+<div th:replace="fragments/fragments :: navbar(switchLocale='false')"></div>
+
+<div class="container-fluid bg-dark">
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8" style="text-align: center">
+            <br/>
+            <br/>
+            <h2 style="color: white" th:text="#{error-403.message}"></h2>
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <img th:src="@{/images/taxi-image.jpg}"/>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
