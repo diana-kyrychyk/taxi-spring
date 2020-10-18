@@ -8,13 +8,13 @@
 
 <body>
 
-<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<div th:replace="fragments/fragments :: navbar(switchLocale='false')"></div>
 <br>
 
 <div class="container">
     <div th:if="${errorMessage != null}" class="alert alert-warning alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>${errorMessage}</strong>
+        <strong th:text="${errorMessage}"></strong>
     </div>
 </div>
 
@@ -101,13 +101,13 @@
 
                         <td>
                             <a th:if="${'NEW'.equals(order.status.toString()) || 'ON_ROAD'.equals(order.status.toString())}"
-                               href="@{'/admin/order-cancel?id=' + ${order.orderId}}"
+                               th:href="@{'/admin/order-cancel?id=' + ${order.orderId}}"
                                class="btn btn-danger btn-sm"
                                role="button"
                                th:text="#{orderlist.button.cancel}"></a>
 
                             <a th:if="${'ON_ROAD'.equals(order.status.toString())}"
-                               href="@{'/admin/order-complete?id=' + ${order.orderId}}"
+                               th:href="@{'/admin/order-complete?id=' + ${order.orderId}}"
                                class="btn btn-success btn-sm"
                                role="button"
                                th:text="#{orderlist.button.complete}"></a>

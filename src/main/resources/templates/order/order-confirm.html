@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Order Confirmation</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='false')"></div>
+<br>
+
+<div class="container">
+    <div th:if="${errorMessage != null}" class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong th:text="${errorMessage}"></strong>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+
+            <div th:if="${order.suggestedCar == null}" class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>
+                    <th:block th:text="#{order.confirmation.message.no-car}"/>
+                </strong>
+            </div>
+
+            <h3 th:text="#{order-confirm.title.order-confirmation}"></h3>
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.departureaddress}"></label>
+                <strong>
+                    <label th:text="${order.departureAddress}"></label>
+                </strong>
+            </div>
+
+            <div class="form-group">
+                <label th:text="#{order.confirm.arrivaladdress}"></label>
+                <strong>
+                    <label th:text="${order.arrivalAddress}"></label>
+                </strong>
+            </div>
+
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.client-phone}"></label>
+                <strong>
+                    <label th:text="${order.userPhone}"></label>
+                </strong>
+            </div>
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.category}"></label>
+                <strong>
+                    <label th:text="${order.category}"></label>
+                </strong>
+            </div>
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.passengers}"></label>
+                <strong>
+                    <label th:text="${order.passengersCount}"></label>
+                </strong>
+            </div>
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.fare}"></label>
+                <label th:if="${order.fare > order.finalFare}"
+                       class="text-danger" style="text-decoration: line-through;"
+                       th:text="${#numbers.formatDecimal(order.fare / 100, 0, 2,'COMMA')}">
+                </label>
+                <label th:if="${order.fare > order.finalFare}"
+                       class="text-danger" style="text-decoration: line-through;"
+                       th:text="/">
+                </label>
+                <label class="text-success" style="font-weight: bold;"
+                       th:text="${#numbers.formatDecimal(order.finalFare / 100, 0, 2,'COMMA')}">
+                </label>
+                <label class="text-success" style="font-weight: bold;"
+                       th:text="UAH">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label th:text="#{order-confirm.car}"></label>
+                <strong th:if="${order.suggestedCar != null}">
+                    <label th:text="${order.suggestedCar.brand}"></label>
+                    <label th:text="${order.suggestedCar.model}"></label>
+                    <label th:text="${order.suggestedCar.licensePlate}"></label>
+                </strong>
+            </div>
+
+            <div class="form-group" style="display: flex; justify-content: space-evenly;">
+
+                <a th:href="@{'/user/order-cancel?id=' + ${order.orderId}}"
+                   class="btn btn-danger" role="button" th:text="#{order-confirm.button.cancel}">
+                </a>
+
+                <form th:action="@{/user/order-confirm}" method="post">
+                    <input name="orderId" type="hidden" th:value="${order.orderId}">
+                    <input th:if="${order.suggestedCar != null}" name="carId" type="hidden"
+                           th:value="${order.suggestedCar.id}">
+                    <button type="submit" class="btn btn-success"
+                            th:text="#{order-confirm.button.confirm}"
+                            th:disabled="${order.suggestedCar == null}">
+                    </button>
+                </form>
+
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+
+</html>
