@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/guest/user-registration").permitAll()
+                .antMatchers("/images/**", "/", "/guest/user-registration").permitAll()
                 .antMatchers("/user/**").hasAnyRole(Role.USER)
                 .antMatchers("/admin/**").hasAnyRole(Role.ADMIN)
                 .anyRequest().denyAll()
@@ -29,7 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and().exceptionHandling().accessDeniedPage("/access-denied");
     }
 
 

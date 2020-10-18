@@ -1,5 +1,7 @@
 package ua.com.taxi.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     private OrderRepository orderRepository;
     private UserRepository userRepository;
     private AddressRepository addressRepository;
@@ -50,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<OrderListDto> findAllDto(OrderFilters orderFilters, Pageable pageable) {
+        LOGGER.debug("findAllDto() [{}, {}]", orderFilters, pageable);
         OrderSpecification orderSpecification = new OrderSpecification(orderFilters);
         Page<Order> ordersPage = orderRepository.findAll(orderSpecification, pageable);
 
@@ -79,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int create(OrderCreateDto orderDto) {
+        LOGGER.debug("create() [{}] ", orderDto);
         Order order = buildOrder(orderDto);
         order = orderRepository.save(order);
         return order.getId();
@@ -127,10 +133,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Optional<OrderConfirmDto> prepareConfirm(int id) {
+        LOGGER.debug("prepareConfirm() [{}]", id);
         Order order = orderRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         Optional<Car> foundCar = carRepository.findFirstByCategoryAndStatusAndCapacityGreaterThanEqual(order.getCategory(), CarStatus.FREE, order.getPassengersCount());
-        Car car = foundCar.orElse(null);
+        Car car = foundCar.orElseGet(() -> {
+            LOGGER.warn("The car not found!");
+            return null;
+        });
 
         OrderConfirmDto orderConfirm = buildConfirmDto(order, car);
 
@@ -154,6 +164,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void cancel(int orderId) {
+        LOGGER.debug("cancel() [{}]", orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.setStatus(OrderStatus.CANCELLED);
 
@@ -166,11 +177,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void confirm(int orderId, int carId) {
+        LOGGER.debug("confirm() [{}, {}]", orderId, carId);
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         Car car = carRepository.findById(carId).orElseThrow(EntityNotFoundException::new);
 
         if (!CarStatus.FREE.equals(car.getStatus())) {
             String message = String.format("Car '%s' is busy", carId);
+            LOGGER.warn(message);
             throw new CarBusyException(message);
         }
 
@@ -184,6 +197,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void complete(int orderId) {
+        LOGGER.debug("complete() [{}]", orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.setStatus(OrderStatus.COMPLETED);
 

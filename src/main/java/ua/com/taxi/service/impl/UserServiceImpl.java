@@ -1,5 +1,7 @@
 package ua.com.taxi.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +27,8 @@ import static ua.com.taxi.domain.Role.USER;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
@@ -42,6 +46,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        LOGGER.debug("loadUserByUsername() [{}]", phone);
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new UsernameNotFoundException(phone));
 
@@ -60,16 +65,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByPhone(String phone) {
+        LOGGER.debug("findByPhone() [{}]", phone);
         return userRepository.findByPhone(phone);
     }
 
     @Override
     public boolean existsByPhone(String phone) {
+        LOGGER.debug("existsByPhone() [{}]", phone);
         return userRepository.existsByPhone(phone);
     }
 
     @Override
     public Optional<User> create(UserRegistrationDto userDto) {
+        LOGGER.debug("create() [{}] ", userDto);
         User user = buildUser(userDto);
         user = userRepository.save(user);
         return Optional.of(user);
@@ -92,16 +100,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
+        LOGGER.debug("findAll()");
         return userRepository.findAll(Sort.by("name").ascending());
     }
 
     @Override
     public Optional<User> findById(int id) {
+        LOGGER.debug("findById()");
         return userRepository.findById(id);
     }
 
     @Override
     public UserUpdateDto findForUpdate(int id) {
+        LOGGER.debug("findForUpdate() [{}]", id);
         Optional<User> user = userRepository.findById(id);
         return toUpdateDto(user.orElseThrow(EntityNotFoundException::new));
     }
@@ -117,6 +128,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void update(UserUpdateDto userDto) {
+        LOGGER.debug("update() [{}]", userDto);
         User user = toEntity(userDto);
         userRepository.save(user);
     }
