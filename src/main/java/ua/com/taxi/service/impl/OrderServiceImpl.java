@@ -18,6 +18,7 @@ import ua.com.taxi.domain.dto.order.OrderConfirmDto;
 import ua.com.taxi.domain.dto.order.OrderCreateDto;
 import ua.com.taxi.domain.dto.order.OrderListDto;
 import ua.com.taxi.exception.CarBusyException;
+import ua.com.taxi.exception.LowBalanceException;
 import ua.com.taxi.repository.AddressRepository;
 import ua.com.taxi.repository.CarRepository;
 import ua.com.taxi.repository.OrderRepository;
@@ -187,11 +188,23 @@ public class OrderServiceImpl implements OrderService {
             throw new CarBusyException(message);
         }
 
+        writeOffPayment(order.getUser(), order.getFinalFare());
+
         car.setStatus(CarStatus.ON_ORDER);
         order.setCar(car);
         order.setDriver(car.getDriver());
         order.setStatus(OrderStatus.ON_ROAD);
         orderRepository.save(order);
+    }
+
+    private void writeOffPayment(User user, long amount) {
+        long newBalance = user.getBalance() - amount;
+        if (newBalance < 0) {
+            String message = String.format("Not enough money on the account '%s'", user.getId());
+            LOGGER.warn(message);
+            throw new LowBalanceException(message);
+        }
+        user.setBalance(newBalance);
     }
 
     @Transactional

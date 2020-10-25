@@ -150,4 +150,12 @@ public class UserServiceImpl implements UserService {
         }
         return roles;
     }
+
+    @Override
+    public void rechargeBalance(String userPhone, long amount) {
+        User user = userRepository.findByPhone(userPhone).orElseThrow(EntityNotFoundException::new);
+        long newBalance = user.getBalance() + amount;
+        user.setBalance(newBalance);
+        userRepository.save(user);
+    }
 }
