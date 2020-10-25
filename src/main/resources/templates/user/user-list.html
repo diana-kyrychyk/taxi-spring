@@ -13,9 +13,10 @@
 <div class="container-fluid">
     <table class="table table-hover">
         <tr>
-            <th>ID</th>
+            <th th:utext="#{user-list.table.name}">ID</th>
             <th>Name</th>
             <th>Phone</th>
+            <th>Balance</th>
             <th>Role</th>
             <th>Actions</th>
         </tr>
@@ -25,6 +26,10 @@
                 <td th:text="${user.id}"></td>
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.phone}"></td>
+                <td>
+                    <label th:if="${user.balance < 100}" th:text="0"></label>
+                    <label th:text="${#numbers.formatDecimal(user.balance / 100, 0, 2,'COMMA')}"></label>
+                </td>
                 <td>
                     <th:block th:each="role : ${user.roles}">
                         <span th:text="${role.name}" class="badge badge-primary"></span>

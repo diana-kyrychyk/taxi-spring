@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Balance Recharge Page</title>
+    <div th:replace="fragments/fragments :: header"></div>
+</head>
+
+<body>
+
+<div th:replace="fragments/fragments :: navbar(switchLocale='true')"></div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h2 align="center">
+                <th:block th:text="#{balance-recharge.recharge}"/>
+            </h2>
+            <form th:action="@{/user/balance-recharge}" th:object="${rechargeBalance}" method="post">
+
+                <div class="form-group">
+                    <label for="amount" th:text="#{balance-recharge.amount}"></label>
+                    <input class="form-control" id="amount" th:placeholder="#{balance-recharge.placeholder.amount}"
+                           th:field="*{amount}" th:value="${amount}"/>
+                    <span class="font-italic text-danger" th:if="${#fields.hasErrors('amount')}"
+                          th:errors="*{amount}"></span>
+                </div>
+
+                <div class="form-group" align="center">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-success">
+                            <th:block th:text="#{balance-recharge.button.recharge}"/>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -23,4 +23,6 @@ public interface UserService extends UserDetailsService {
     Optional<User> create(UserRegistrationDto user);
 
     List<User> findAll();
+
+    void rechargeBalance(String userPhone, long amount);
 }
