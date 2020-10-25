@@ -31,6 +31,7 @@ import ua.com.taxi.domain.dto.order.OrderCreateDto;
 import ua.com.taxi.domain.dto.order.OrderListDto;
 import ua.com.taxi.domain.dto.order.SearchParameters;
 import ua.com.taxi.exception.CarBusyException;
+import ua.com.taxi.exception.LowBalanceException;
 import ua.com.taxi.service.AddressService;
 import ua.com.taxi.service.OrderService;
 import ua.com.taxi.service.UserService;
@@ -169,6 +170,10 @@ public class OrderController {
             page = "redirect:/";
         } catch (CarBusyException e) {
             String message = messageSource.getMessage("order-confirm.car-is-busy.exception", new Object[0], locale);
+            redirectAttributes.addFlashAttribute("errorMessage", message);
+            page = String.format("redirect:/user/order-confirm?id=%s", orderId);
+        } catch (LowBalanceException e) {
+            String message = messageSource.getMessage("order-confirm.low-balance.exception", new Object[0], locale);
             redirectAttributes.addFlashAttribute("errorMessage", message);
             page = String.format("redirect:/user/order-confirm?id=%s", orderId);
         }
