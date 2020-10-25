@@ -46,11 +46,18 @@
                 </li>
             </ul>
 
-            <div>
-                <a sec:authorize="hasRole('USER')" class="nav-link text-white" th:href="@{/user/order-create}">
-                    <th:block th:text="#{navbar.book}"/>
-                </a>
-            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a sec:authorize="hasRole('USER')" class="nav-link text-white" th:href="@{/user/balance-recharge}">
+                        <th:block th:text="#{navbar.recharge}"/>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="hasRole('USER')" class="nav-link text-white" th:href="@{/user/order-create}">
+                        <th:block th:text="#{navbar.book}"/>
+                    </a>
+                </li>
+            </ul>
 
             <div style="display: flex; align-items: center;">
                 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
