@@ -15,6 +15,7 @@
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
+            <div th:replace="fragments/messages"></div>
             <h2 align="center">
                 <th:block th:text="#{balance-recharge.recharge}"/>
             </h2>
@@ -35,9 +36,7 @@
                         </button>
                     </div>
                 </div>
-
             </form>
-
         </div>
         <div class="col-sm-3"></div>
     </div>

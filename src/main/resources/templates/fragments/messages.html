@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<div th:if="${successMessage != null}" class="alert alert-success alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong th:text="${successMessage}"></strong>
+</div>
+
+<div th:if="${warningMessage != null}" class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong th:text="${warningMessage}"></strong>
+</div>
+
+<div th:if="${errorMessage != null}" class="alert alert-danger alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong th:text="${errorMessage}"></strong>
+</div>
+
+</html>
