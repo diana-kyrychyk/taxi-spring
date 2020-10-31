@@ -18,6 +18,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserServiceImplTest {
@@ -26,6 +28,8 @@ public class UserServiceImplTest {
     String name = "testName";
     String phone = "+380630000001";
     String password = "passwordTest";
+    long newBalance;
+    long amount;
     List<Role> roles = buildRoles();
 
     @Mock
@@ -64,6 +68,21 @@ public class UserServiceImplTest {
         assertEquals(expectedUserUpdateDto, actualUserUpdate);
     }
 
+    @Test
+    public void shouldRechargeUserBalance() {
+        //given
+        User user = buildUser();
+        User expectedUser = buildUser();
+        expectedUser.setBalance(889);
+        when(userRepositoryMock.findByPhone(phone)).thenReturn(Optional.ofNullable(user));
+
+        //when
+        userService.rechargeBalance(phone, 789);
+
+        //then
+        verify(userRepositoryMock, times(1)).save(expectedUser);
+    }
+
 
     private UserUpdateDto buildUserUpdateDto() {
         UserUpdateDto userUpdateDto = new UserUpdateDto();
@@ -80,6 +99,7 @@ public class UserServiceImplTest {
         user.setPhone(phone);
         user.setPassword(password);
         user.setRoles(roles);
+        user.setBalance(100);
         return user;
     }
 
